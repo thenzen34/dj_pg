@@ -1,2 +1,2 @@
-#!/bin/bash
-../venv/bin/python3 manage.py collectstatic
+#!/bin/sh
+python3 manage.py collectstatic

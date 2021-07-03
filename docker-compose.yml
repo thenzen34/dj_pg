@@ -1,6 +1,26 @@
 version: "2"
 
 services:
+  django:
+    image: django_pg:1.0
+    build: ./service
+    command: >
+      sh -c "cd /usr/src/app &&
+             python3 manage.py migrate &&
+             python3 manage.py runserver 0.0.0.0:8000"
+    volumes:
+      - ./src/:/usr/src/app/
+      - ./service/:/usr/src/service/
+      - ./crontab/:/usr/src/crontab/
+    ports:
+      - ${WEB_PORT}:8000
+    environment:
+      - DEBUG=1
+    env_file:
+      - ./src/.env
+    depends_on:
+      - postgres
+
   postgres:
     image: postgres:latest
     environment:

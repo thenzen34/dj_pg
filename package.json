@@ -4,6 +4,9 @@
   "author": "murashev <murashev@cetacs.com>",
   "license": "MIT",
   "scripts": {
-    "back_dev": "cd dev && ./run_dev.sh"
+    "back_dev": "cd dev && ./run_dev.sh",
+
+    "up": "cd service && ./run_docker_compose.sh",
+    "connect": "cd service && ./connect_to_docker.sh"
   }
 }
