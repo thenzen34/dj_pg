@@ -1,2 +1,2 @@
-#!/bin/bash
-../venv/bin/python3 manage.py runserver 127.0.0.1:8777
+#!/bin/sh
+python3 manage.py runserver 127.0.0.1:8777

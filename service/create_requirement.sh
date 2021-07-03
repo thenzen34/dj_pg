@@ -1,3 +1,3 @@
-#!/bin/bash
-source ./venv/bin/activate
-./venv/bin/pip3 freeze > requirements.txt
+#!/bin/sh
+pip3 freeze > requirements.txt
+sed -i '/pkg-resources/d' requirements.txt
