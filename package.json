@@ -1,0 +1,9 @@
+{
+  "name": "dj_pg",
+  "version": "1.0.0",
+  "author": "murashev <murashev@cetacs.com>",
+  "license": "MIT",
+  "scripts": {
+    "back_dev": "cd dev && ./run_dev.sh"
+  }
+}

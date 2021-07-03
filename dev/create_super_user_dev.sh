@@ -1,4 +1,4 @@
 #!/bin/bash
 source ./load_env.sh
-cd src
-./run.sh
+cd ../src
+./create_super_user.sh
