@@ -4,18 +4,22 @@ import os
 
 from .settings import BASE_DIR
 
-BACKEND_DB_ENGINE = os.getenv('BACKEND_DB_ENGINE')
-if 'sqlite3' == BACKEND_DB_ENGINE:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.{0}'.format(BACKEND_DB_ENGINE),
-            'NAME': '{0}/{1}'.format(BASE_DIR, os.getenv('BACKEND_DB_NAME')),
-            'TEST': {
-                # 'NAME': BASE_DIR / os.getenv('BACKEND_DB_NAME'),
-            },
-        }
-    }
+import dj_database_url
+
+# Database
+# https://docs.djangoproject.com/en/3.2/ref/settings/#databases
+
+DATABASES = {
+    'default': {}
+}
+
+DATABASE_URL = os.environ.get('DATABASE_URL', False)
+
+if DATABASE_URL:
+    db_from_env = dj_database_url.config(default=DATABASE_URL, conn_max_age=500, ssl_require=True)
+    DATABASES['default'].update(db_from_env)
 else:
+    BACKEND_DB_ENGINE = os.getenv('BACKEND_DB_ENGINE')
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.{0}'.format(BACKEND_DB_ENGINE),
@@ -24,5 +28,5 @@ else:
             'PASSWORD': os.getenv('BACKEND_DB_PASSWORD'),
             'HOST': os.getenv('BACKEND_DB_HOST'),
             'PORT': os.getenv('BACKEND_DB_PORT'),
-        }
+        },
     }
