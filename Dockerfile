@@ -19,8 +19,11 @@ RUN pip install -r requirements.txt
 # copy project
 COPY ./src .
 
+
+COPY ./logs /logs
+
 # collect static files
-RUN python manage.py collectstatic --noinput
+#RUN python manage.py collectstatic --noinput
 
 # add and run as non-root user
 #RUN adduser -D myuser

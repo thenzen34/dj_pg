@@ -2,16 +2,22 @@
 #heroku container:login
 #docker build -t web:latest .
 #docker run -d --name django-heroku -e "PORT=8765" -e "DEBUG=1" -p 8007:8765 web:latest
-# TODO APP_NAME=nameless-fortress-14304
+APP_NAME=nameless-fortress-14304
 
-docker build -t registry.heroku.com/nameless-fortress-14304/web .
-docker push registry.heroku.com/nameless-fortress-14304/web
-heroku container:release -a nameless-fortress-14304 web
+docker build -t registry.heroku.com/$APP_NAME/web .
+docker push registry.heroku.com/$APP_NAME/web
 
-# heroku config:set SECRET_KEY=SOME_SECRET_VALUE -a nameless-fortress-14304
-heroku open -a nameless-fortress-14304
-# heroku addons:create heroku-postgresql:hobby-dev -a nameless-fortress-14304
-# heroku run python manage.py makemigrations -a nameless-fortress-14304
+#heroku container push -> release
+#heroku ps:scale test=1 -a $APP_NAME
+heroku container:release -a $APP_NAME web
+heroku container:release -a $APP_NAME test
 
-#heroku run python manage.py migrate -a nameless-fortress-14304
-# heroku run python manage.py createsuperuser -a nameless-fortress-14304
+# heroku config:set SECRET_KEY=SOME_SECRET_VALUE -a $APP_NAME
+# heroku open -a $APP_NAME
+
+heroku logs  -a $APP_NAME
+# heroku addons:create heroku-postgresql:hobby-dev -a $APP_NAME
+# heroku run python manage.py makemigrations -a $APP_NAME
+
+#heroku run python manage.py migrate -a $APP_NAME
+# heroku run python manage.py createsuperuser -a $APP_NAME

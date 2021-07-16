@@ -6,7 +6,14 @@ from django.shortcuts import render
 
 
 def index(request):
-    return render(request, 'chat/index.html', {})
+    def get_template_names():
+        is_mobile = getattr(request, 'Mobile_Agent')
+
+        if is_mobile:
+            return 'chat/mobile_index.html'
+        return 'chat/index.html'
+
+    return render(request, get_template_names(), {})
 
 
 def test(request):

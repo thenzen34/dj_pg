@@ -5,13 +5,15 @@ services:
     image: django_pg:1.0
     build: .
     command: >
-      sh -c "cd /usr/src/app &&
+      sh -c "cd /app &&
+             python3 manage.py collectstatic --noinput &&
              python3 manage.py migrate &&
              python3 manage.py runserver 0.0.0.0:8000"
     volumes:
-      - ./src/:/usr/src/app/
-      - ./service/:/usr/src/service/
-      - ./crontab/:/usr/src/crontab/
+      - ./src/:/app/
+      - ./logs/:/logs/
+      - ./service/:/service/
+      - ./crontab/:/crontab/
     ports:
       - ${WEB_PORT}:8000
     environment:
@@ -21,6 +23,46 @@ services:
       - ./src/.env
     depends_on:
       - postgres
+
+  celery:
+    image: django_pg:1.0
+    build: .
+    command: >
+      sh -c "cd /app &&
+             celery -A backend worker -l info"
+    volumes:
+      - ./src/:/app/
+      - ./logs/:/logs/
+      - ./service/:/service/
+      - ./crontab/:/crontab/
+    environment:
+      - DEBUG=1
+    #      - DATABASE_URL=postgres://${PG_USER}:${PG_PASSWORD}@postgres:5432/${PG_DATABASE}
+    env_file:
+      - ./src/.env
+    depends_on:
+      - django
+      - redis
+
+#  celery-beat:
+#    image: django_pg:1.0
+#    build: .
+#    command: >
+#      sh -c "cd /app &&
+#             celery -A backend beat -l info"
+#    volumes:
+#      - ./src/:/app/
+#      - ./logs/:/logs/
+#      - ./service/:/service/
+#      - ./crontab/:/crontab/
+#    environment:
+#      - DEBUG=1
+#    #      - DATABASE_URL=postgres://${PG_USER}:${PG_PASSWORD}@postgres:5432/${PG_DATABASE}
+#    env_file:
+#      - ./src/.env
+#    depends_on:
+#      - django
+#      - redis
 
   postgres:
     image: postgres:latest
