@@ -1,19 +1,19 @@
 build:
   docker:
     web: Dockerfile
-    worker: Dockerfile
 run:
   web: daphne -b 0.0.0.0 -p $PORT backend.asgi:application
   test:
+    image: web
     command:
       - echo hello
   worker:
+    image: web
     command:
       - python manage.py collectstatic --noinput
       - python manage.py migrate
       - python manage.py runworker channels --settings=backend.settings
       - celery worker -A backend worker -l INFO
-    image: web
 release:
   image: web
   command:
