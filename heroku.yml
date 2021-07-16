@@ -12,7 +12,7 @@ run:
   celery:
     image: web
     command:
-      - celery worker -A backend worker -l INFO
+      - celery -A backend worker -l INFO
 release:
   image: web
   command:
